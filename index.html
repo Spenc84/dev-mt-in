@@ -10,35 +10,31 @@
 </head>
 
 <body ng-controller="devCtrl">
+
+  <!-- Header -->
 	<div class="l-header">
 		<h1>{{myProfile.name || 'Your Name' }}</h1>
 	</div>
 
+  <!-- Profile Form menu -->
   <div class="wrapper">
     <div>
       <h2>Profile</h2>
       <button ng-click="edit()" class="l-btn l-btn-main">{{editButton}}</button>
     </div>
-
     <div>
-
-      <input ng-model="myProfile.name" id="name" ng-disabled="!editing" type="text" placeholder="Your Name">
-      <br />
-
-      <input ng-model="myProfile.likes" id="likes" ng-disabled="!editing" type="text" placeholder="Likes">
-      <br />
-
-      <input ng-model="myProfile.favColor" id="favColor" ng-disabled="!editing" type="text" placeholder="Favorite Color">
-      <br />
+      <input ng-model="myProfile.name" id="name" ng-disabled="!editing" type="text" placeholder="Your Name"><br />
+      <input ng-model="myProfile.likes" id="likes" ng-disabled="!editing" type="text" placeholder="Likes"><br />
+      <input ng-model="myProfile.favColor" id="favColor" ng-disabled="!editing" type="text" placeholder="Favorite Color"><br />
       <button class="l-btn l-btn-success" ng-click="saveProfile(myProfile)">Save</button>
       <button class="l-btn l-btn-danger" ng-click="deleteProfile()">Delete</button>
     </div>
   </div>
 
+  <!-- Friends List -->
   <div class="l-container">
     <h2>Friends</h2>
-
-    <button class="l-btn l-btn-main">Go</button>
+    <button class="l-btn l-btn-main" ng-click="findFriends(findFriend.name)">Go</button>
     <input ng-model="findFriend.name" type="text" placeholder="Find Friends">
     <select ng-model="sortReverse" ng-options="option.value as option.display for option in sortOptions"></select>
     <div class="friendList" ng-repeat="friend in myProfile.friends | filter: findFriend.name | orderBy: 'name' : sortReverse">
@@ -59,8 +55,9 @@
 					Add Friends
 				</div>
 					<br />
-				<div class="friendList">
-					<span class="friend"></span> Potential Friends
+          Potential Friends
+				<div class="friendList" ng-repeat="friend in potentialFriends">
+					<span class="friend" ng-click="addFriend(friend._id)"></span>{{friend.name}}
 				</div>
 			</div>
 		</div>
@@ -69,6 +66,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
   <script src="devApp.js"></script>
   <script src="profileService.js"></script>
+  <script src="friendService.js"></script>
   <script src="devCtrl.js"></script>
 </body>
 

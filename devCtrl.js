@@ -1,5 +1,5 @@
-angular.module('devApp').controller('devCtrl', ['$scope', 'profileService', '$http', function( $scope, profileService, $http ){
-  //Sorting Controls
+angular.module('devApp').controller('devCtrl', ['$scope', 'profileService', 'friendService', '$http', function( $scope, profileService, friendService, $http ){
+  //Friend Sorting Controls
   $scope.sortOptions = [{display: 'Ascending', value: false},
                         {display: 'Descending', value: true}];
   $scope.sortReverse = false;
@@ -23,11 +23,13 @@ angular.module('devApp').controller('devCtrl', ['$scope', 'profileService', '$ht
       profileService.getProfile(proId.pId)
       .then(function(res){
         $scope.myProfile = res.data;
+        console.log(res.data);
       }).catch(function(err){
         console.log(err);
       });
     }
-  }.call();
+  }
+  $scope.loadProfile();
   $scope.saveProfile = function(profile){
     profileService.saveProfile(profile);
     $scope.edit();
@@ -42,5 +44,20 @@ angular.module('devApp').controller('devCtrl', ['$scope', 'profileService', '$ht
       console.log(err);
     });
   };
-
+  $scope.findFriends = function(query){
+    friendService.findFriends($scope.myProfile._id, query)
+    .then(function(res){
+      $scope.potentialFriends = res.data;
+    })
+    .catch(function(err){
+      console.log(err);
+    });
+    $scope.findFriend.name = "";
+  };
+  $scope.addFriend = function(friendId){
+    friendService.addFriend($scope.myProfile._id, friendId)
+    .then(function(res){
+      $scope.loadProfile();
+    });
+  };
 }]);
